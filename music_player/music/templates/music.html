@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-yellow-100 flex flex-col items-center justify-start min-h-screen p-4">
+
+    <!-- Поисковая форма -->
+    <form method="get" class="bg-black p-6 rounded shadow-md w-full max-w-lg flex items-center justify-center">
+        <input class="p-2 w-full rounded-l" type="text" name="q" placeholder="Введите название песни" value="{{ query }}">
+        <button class="bg-yellow-400 p-2 rounded-r ml-2" type="submit">Поиск</button>
+    </form>
+
+    <!-- Отступ между формой и результатами -->
+    <div class="mt-10 w-full flex justify-center">
+        {% if songs %}
+            <div class="w-full max-w-6xl">
+                {% if query %}
+                    <h2 class="text-xl font-bold mb-4 text-center">Результаты поиска для "{{ query }}":</h2>
+                {% else %}
+                    <h2 class="text-xl font-bold mb-4 text-center">Популярные песни:</h2>
+                {% endif %}
+
+                {% if songs|length == 0 %}
+                    <p>Ничего не найдено.</p>
+                {% endif %}
+
+                <div class="flex flex-wrap gap-4 justify-center">
+                    {% for song in songs %}
+                        <div class="bg-white rounded-xl shadow-md p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+                            <strong class="block mb-1 text-center">{{ song.title }}</strong>
+                            <p class="text-center text-gray-600 mb-2">{{ song.artist.name }}</p>
+                            <img src="{{ song.album.cover_medium }}" alt="Обложка" class="mx-auto mb-2 rounded-md shadow-md">
+                            <audio controls class="w-full">
+                                <source src="{{ song.preview }}" type="audio/mpeg">
+                                Ваш браузер не поддерживает аудио.
+                            </audio>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% elif query %}
+            <p>Ничего не найдено.</p>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>
